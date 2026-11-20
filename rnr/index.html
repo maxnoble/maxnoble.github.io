@@ -178,7 +178,7 @@
             <li>Its condition, plus any photos or links</li>
             <li>Your name and a valid email (required for every suggestion)</li>
           </ul>
-          <p><em>The suggestion form is coming soon.</em></p>
+          <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/viewform" target="_blank" rel="noopener">Open the suggestion form</a>
         </div>
       </div>
     </div>
@@ -214,7 +214,7 @@
 <script>
   // Paste the Google Form's embed URL here (Send → <> → copy the src="..." link).
   // While it is empty, the page shows "coming soon".
-  const FORM_URL = "";
+  const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/viewform?embedded=true";
 
   if (FORM_URL) {
     const f = document.createElement("iframe");
@@ -223,6 +223,10 @@
     f.title = "Suggest a location";
     f.loading = "lazy";
     document.getElementById("form-slot").appendChild(f);
+    const p = document.createElement("p");
+    p.className = "note";
+    p.innerHTML = 'Form not showing? <a href="' + FORM_URL.replace("?embedded=true", "") + '" target="_blank" rel="noopener">Open it in a new tab.</a>';
+    document.getElementById("form-slot").appendChild(p);
     document.getElementById("form-fallback").hidden = true;
   }
 </script>
