@@ -34,6 +34,7 @@
   }
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
@@ -77,7 +78,31 @@
   .suggest { background: var(--soft); }
   .suggest-box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.4rem; }
   .suggest-box ul { margin: .4rem 0 1.2rem; padding-left: 1.2rem; }
-  .form-frame { width: 100%; min-height: 900px; border: 0; }
+  .sform { display: grid; gap: 1.2rem; }
+  .sform .field { display: grid; gap: .35rem; }
+  .sform label.q, .sform legend { font-weight: 600; }
+  .sform .req { color: var(--accent); }
+  .sform .hint { font-size: .9rem; color: var(--muted); }
+  .sform input[type=text], .sform input[type=email], .sform input[type=url], .sform textarea {
+    width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 6px; padding: .6rem .7rem; }
+  .sform textarea { min-height: 5.5rem; resize: vertical; }
+  .sform input:focus, .sform textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .sform fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: .35rem; }
+  .sform .choices { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; align-items: center; }
+  .sform .choices label { display: inline-flex; gap: .4rem; align-items: center; font-weight: 400; }
+  .sform .other-text { max-width: 14rem; }
+  .scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+  .scale label { display: grid; place-items: center; padding: .45rem 0; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-weight: 400; background: var(--bg); }
+  .scale input { position: absolute; opacity: 0; pointer-events: none; }
+  .scale input:checked + span { color: var(--accent-ink); }
+  .scale label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .scale label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .scale-ends { display: flex; justify-content: space-between; font-size: .85rem; color: var(--muted); }
+  .sform button { justify-self: start; border: 0; cursor: pointer; font: inherit; }
+  .sform button[disabled] { opacity: .6; cursor: wait; }
+  .thanks h3 { margin: 0 0 .4rem; }
+  .form-error { color: #b3261e; }
 
   footer { border-top: 1px solid var(--line); padding: 2rem 0 3rem; color: var(--muted); font-size: .92rem; }
 </style>
@@ -168,18 +193,72 @@
       <h2>Suggest a location</h2>
       <p class="intro">There are hundreds of buildings that could become a Men's Convent. Know of one that's empty or at risk, anywhere? Tell us about it.</p>
       <div class="suggest-box">
-        <div id="form-slot"></div>
-        <div id="form-fallback">
-          <p>It helps to know:</p>
-          <ul>
-            <li>Where it is (town, address or nearest landmark)</li>
-            <li>What the building is or was, and roughly how old it is</li>
-            <li>Who owns it now, and whether it's for sale, if you know</li>
-            <li>Its condition, plus any photos or links</li>
-            <li>Your name and a valid email (required for every suggestion)</li>
-          </ul>
-          <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/viewform" target="_blank" rel="noopener">Open the suggestion form</a>
+        <form class="sform" id="suggest-form" action="https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/formResponse" method="POST" target="gform-sink">
+          <div class="field">
+            <label class="q" for="f-email">Your email <span class="req">*</span></label>
+            <input id="f-email" type="email" name="emailAddress" required autocomplete="email">
+            <span class="hint">A copy of your suggestion is sent here.</span>
+          </div>
+
+          <fieldset>
+            <legend>Where is the building? <span class="req">*</span></legend>
+            <div class="choices">
+              <label><input type="radio" name="entry.1686422312" value="Saskatchewan" required> Saskatchewan</label>
+              <label><input type="radio" name="entry.1686422312" value="Alberta"> Alberta</label>
+              <label><input type="radio" name="entry.1686422312" value="__other_option__" id="f-where-other"> Other:</label>
+              <input class="other-text" type="text" name="entry.1686422312.other_option_response" id="f-where-other-text" aria-label="Other location">
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label class="q" for="f-what">What is or was the building? Landmark significance? <span class="req">*</span></label>
+            <textarea id="f-what" name="entry.1505201343" required></textarea>
+          </div>
+
+          <div class="field">
+            <label class="q" for="f-owner">Who owns it? <span class="req">*</span></label>
+            <input id="f-owner" type="text" name="entry.762597540" required>
+          </div>
+
+          <fieldset>
+            <legend>What condition is it in? <span class="req">*</span></legend>
+            <div class="scale">
+              <label><input type="radio" name="entry.2011804583" value="1" required><span>1</span></label>
+              <label><input type="radio" name="entry.2011804583" value="2"><span>2</span></label>
+              <label><input type="radio" name="entry.2011804583" value="3"><span>3</span></label>
+              <label><input type="radio" name="entry.2011804583" value="4"><span>4</span></label>
+              <label><input type="radio" name="entry.2011804583" value="5"><span>5</span></label>
+              <label><input type="radio" name="entry.2011804583" value="6"><span>6</span></label>
+              <label><input type="radio" name="entry.2011804583" value="7"><span>7</span></label>
+              <label><input type="radio" name="entry.2011804583" value="8"><span>8</span></label>
+              <label><input type="radio" name="entry.2011804583" value="9"><span>9</span></label>
+              <label><input type="radio" name="entry.2011804583" value="10"><span>10</span></label>
+            </div>
+            <div class="scale-ends"><span>1 = Collapsed roof</span><span>10 = Immaculate</span></div>
+          </fieldset>
+
+          <div class="field">
+            <label class="q" for="f-photos">Link to photos</label>
+            <input id="f-photos" type="text" name="entry.1899643314" placeholder="https://">
+          </div>
+
+          <div class="field">
+            <label class="q" for="f-name">First and last name and phone number <span class="req">*</span></label>
+            <input id="f-name" type="text" name="entry.1188429359" required autocomplete="name">
+          </div>
+
+          <input type="hidden" name="fvv" value="1">
+          <input type="hidden" name="pageHistory" value="0">
+          <button class="btn" type="submit" id="f-submit">Send suggestion</button>
+          <p class="form-error" id="f-error" hidden></p>
+        </form>
+
+        <div class="thanks" id="f-thanks" hidden>
+          <h3>Thank you.</h3>
+          <p>Your suggestion has been received. A copy is on its way to your email.</p>
+          <p><a href="#suggest" id="f-again">Suggest another building</a></p>
         </div>
+        <iframe name="gform-sink" id="gform-sink" title="" hidden></iframe>
       </div>
     </div>
   </section>
@@ -212,23 +291,52 @@
 </footer>
 
 <script>
-  // Paste the Google Form's embed URL here (Send → <> → copy the src="..." link).
-  // While it is empty, the page shows "coming soon".
-  const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/viewform?embedded=true";
+  // The form posts straight to the Google Form "RnR -Waiting list" (project Gmail).
+  // If you add, remove or change questions in Google Forms, this form must be updated too.
+  (function () {
+    const form = document.getElementById("suggest-form");
+    const sink = document.getElementById("gform-sink");
+    const thanks = document.getElementById("f-thanks");
+    const err = document.getElementById("f-error");
+    const btn = document.getElementById("f-submit");
+    const other = document.getElementById("f-where-other");
+    const otherText = document.getElementById("f-where-other-text");
+    let sent = false, timer = null;
 
-  if (FORM_URL) {
-    const f = document.createElement("iframe");
-    f.src = FORM_URL;
-    f.className = "form-frame";
-    f.title = "Suggest a location";
-    f.loading = "lazy";
-    document.getElementById("form-slot").appendChild(f);
-    const p = document.createElement("p");
-    p.className = "note";
-    p.innerHTML = 'Form not showing? <a href="' + FORM_URL.replace("?embedded=true", "") + '" target="_blank" rel="noopener">Open it in a new tab.</a>';
-    document.getElementById("form-slot").appendChild(p);
-    document.getElementById("form-fallback").hidden = true;
-  }
+    otherText.addEventListener("input", () => { if (otherText.value) other.checked = true; });
+    form.addEventListener("change", () => { otherText.required = other.checked; });
+
+    form.addEventListener("submit", () => {
+      sent = true;
+      err.hidden = true;
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      timer = setTimeout(() => {
+        if (!sent) return;
+        sent = false;
+        btn.disabled = false;
+        btn.textContent = "Send suggestion";
+        err.innerHTML = 'That didn\'t go through. Please try again, or <a href="https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/viewform" target="_blank" rel="noopener">use the form on Google</a>.';
+        err.hidden = false;
+      }, 15000);
+    });
+
+    sink.addEventListener("load", () => {
+      if (!sent) return;
+      sent = false;
+      clearTimeout(timer);
+      form.reset();
+      form.hidden = true;
+      thanks.hidden = false;
+      btn.disabled = false;
+      btn.textContent = "Send suggestion";
+    });
+
+    document.getElementById("f-again").addEventListener("click", () => {
+      thanks.hidden = true;
+      form.hidden = false;
+    });
+  })();
 </script>
 </body>
 </html>
