@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RnR: Rescue and Restoration</title>
+<meta name="description" content="A Men's Convent in a historic building that needs saving. Suggest a location anywhere.">
+<style>
+  :root {
+    --bg: #f7f3ec;
+    --surface: #fffdf8;
+    --ink: #2a2520;
+    --muted: #6b6157;
+    --line: #e2d9cb;
+    --accent: #8a4b2a;
+    --accent-ink: #ffffff;
+    --soft: #efe6d8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1815;
+      --surface: #24201c;
+      --ink: #eee7dc;
+      --muted: #b0a596;
+      --line: #3a332c;
+      --accent: #d98b5f;
+      --accent-ink: #1b1815;
+      --soft: #2c2722;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1815; --surface: #24201c; --ink: #eee7dc; --muted: #b0a596;
+    --line: #3a332c; --accent: #d98b5f; --accent-ink: #1b1815; --soft: #2c2722;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  h1, h2, h3 { font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; line-height: 1.2; font-weight: 600; }
+  a { color: var(--accent); }
+  .wrap { max-width: 60rem; margin: 0 auto; padding: 0 16px; }
+
+  header.top { border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: .9rem; padding-bottom: .9rem; }
+  .brand { font-family: Georgia, serif; font-weight: 600; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  nav a { color: var(--muted); text-decoration: none; margin-left: 1.1rem; font-size: .95rem; }
+  nav a:hover { color: var(--ink); }
+  @media (max-width: 560px) { nav a:not(.cta-link) { display: none; } }
+
+  .hero { padding: 4.5rem 0 3.5rem; }
+  .hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); margin: 0 0 1rem; max-width: 18ch; }
+  .hero p.lead { font-size: 1.2rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.8rem; }
+  .btn { display: inline-block; background: var(--accent); color: var(--accent-ink); padding: .75rem 1.3rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
+  .btn:hover { filter: brightness(1.08); }
+  .note { font-size: .9rem; color: var(--muted); margin-top: 1.2rem; }
+
+  section { padding: 3.2rem 0; border-top: 1px solid var(--line); }
+  section h2 { font-size: 1.8rem; margin: 0 0 .6rem; }
+  section > .wrap > p.intro { color: var(--muted); max-width: 40rem; margin: 0 0 2rem; }
+
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.2rem 1.3rem; }
+  .card h3 { margin: 0 0 .4rem; font-size: 1.15rem; }
+  .card p { margin: 0; }
+
+  .phases { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); counter-reset: ph; }
+  .phase { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.2rem 1.3rem; }
+  .phase .tag { display: inline-block; font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
+  .phase h3 { margin: .2rem 0 .5rem; font-size: 1.2rem; }
+  .phase .pub { margin-top: .8rem; font-size: .9rem; color: var(--muted); }
+  .meter { height: 6px; background: var(--soft); border-radius: 3px; margin-top: .35rem; overflow: hidden; }
+  .meter span { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+
+  .suggest { background: var(--soft); }
+  .suggest-box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.4rem; }
+  .suggest-box ul { margin: .4rem 0 1.2rem; padding-left: 1.2rem; }
+  .form-frame { width: 100%; min-height: 900px; border: 0; }
+
+  footer { border-top: 1px solid var(--line); padding: 2rem 0 3rem; color: var(--muted); font-size: .92rem; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">RnR: Rescue and Restoration</a>
+    <nav>
+      <a href="#idea">The idea</a>
+      <a href="#phases">Phases</a>
+      <a href="#involved">Get involved</a>
+      <a class="cta-link" href="#suggest">Suggest a location</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <h1>A Men's Convent in a building that needs saving.</h1>
+    <p class="lead">Across Saskatchewan and beyond, historic buildings stand empty. RnR is a way to bring them back: a community of men restores the building, learns a trade doing it, and opens it back up to the town.</p>
+    <a class="btn" href="#suggest">Suggest a location</a>
+  </div>
+
+  <section id="idea">
+    <div class="wrap">
+      <h2>The idea</h2>
+      <p class="intro">Walk in homeless, walk out with purpose. Restoring the building is itself the program.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Restoration is the program</h3>
+          <p>Men restore the building in small teams led by certified journeymen: floors, woodwork, windows, plaster and rooms. Each man leaves with a documented trade portfolio.</p>
+        </div>
+        <div class="card">
+          <h3>Bottom-up, not top-down</h3>
+          <p>There's no fixed master plan. Problems are logged, and the expert in charge of each trade area chooses the projects and the crews, within a heritage conservation plan.</p>
+        </div>
+        <div class="card">
+          <h3>Journeymen are honoured guests</h3>
+          <p>Skilled tradespeople volunteer their time. They can come and stay for up to a week to guide the younger men and pass their trade on.</p>
+        </div>
+        <div class="card">
+          <h3>Everyone contributes</h3>
+          <p>Disciplined work toward one shared purpose. Anyone can learn any trade or skill. Men who are sick or injured are looked after first.</p>
+        </div>
+        <div class="card">
+          <h3>Christ-centred, open to all</h3>
+          <p>Led by Jesus and the Holy Spirit. Men of any faith or none are welcome. Worship is offered, never required.</p>
+        </div>
+        <div class="card">
+          <h3>Non-profit and open</h3>
+          <p>No profiteering. The work is recorded and documented openly, so the community can see the building come back to life.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="phases">
+    <div class="wrap">
+      <h2>About five years, three phases</h2>
+      <p class="intro">Each building opens a little more to the public as the work goes on.</p>
+      <div class="phases">
+        <div class="phase">
+          <span class="tag">Phase 1</span>
+          <h3>Rescue</h3>
+          <p>A men's convent moves in. Secure the site, deal with emergencies like water, clean out and stabilize.</p>
+          <div class="pub">Public use: about 1%<div class="meter"><span style="width:1%"></span></div></div>
+        </div>
+        <div class="phase">
+          <span class="tag">Phase 2</span>
+          <h3>Restoration</h3>
+          <p>Teams restore the building room by room. A recovery program begins with a licensed clinical partner.</p>
+          <div class="pub">Public use: about 5%<div class="meter"><span style="width:5%"></span></div></div>
+        </div>
+        <div class="phase">
+          <span class="tag">Phase 3</span>
+          <h3>Freedom Learning Hub</h3>
+          <p>The restored building opens most of its space to the community: a place where people of all ages learn, research and build.</p>
+          <div class="pub">Public use: over half<div class="meter"><span style="width:55%"></span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="suggest" class="suggest">
+    <div class="wrap">
+      <h2>Suggest a location</h2>
+      <p class="intro">There are hundreds of buildings that could become a Men's Convent. Know of one that's empty or at risk, anywhere? Tell us about it.</p>
+      <div class="suggest-box">
+        <div id="form-slot"></div>
+        <div id="form-fallback">
+          <p>It helps to know:</p>
+          <ul>
+            <li>Where it is (town, address or nearest landmark)</li>
+            <li>What the building is or was, and roughly how old it is</li>
+            <li>Who owns it now, and whether it's for sale, if you know</li>
+            <li>Its condition, plus any photos or links</li>
+            <li>How to reach you (optional)</li>
+          </ul>
+          <p><em>The suggestion form is coming soon.</em></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="involved">
+    <div class="wrap">
+      <h2>Get involved</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Journeymen</h3>
+          <p>Give a week of your trade. Stay on site, lead a small team and pass on what you know.</p>
+        </div>
+        <div class="card">
+          <h3>Trade experts</h3>
+          <p>Kitchen, HVAC, boiler, gas fitting, electrical, plumbing, masonry, IT and more. Each trade area needs someone in charge.</p>
+        </div>
+        <div class="card">
+          <h3>Communities</h3>
+          <p>Have an empty building in your town? <a href="#suggest">Suggest it.</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>RnR: Rescue and Restoration · A non-profit Men's Convent model</p>
+  </div>
+</footer>
+
+<script>
+  // Paste the Google Form's embed URL here (Send → <> → copy the src="..." link).
+  // While it is empty, the page shows "coming soon".
+  const FORM_URL = "";
+
+  if (FORM_URL) {
+    const f = document.createElement("iframe");
+    f.src = FORM_URL;
+    f.className = "form-frame";
+    f.title = "Suggest a location";
+    f.loading = "lazy";
+    document.getElementById("form-slot").appendChild(f);
+    document.getElementById("form-fallback").hidden = true;
+  }
+</script>
+</body>
+</html>
