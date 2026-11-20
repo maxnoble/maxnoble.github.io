@@ -47,11 +47,11 @@
   header.top { border-bottom: 1px solid var(--line); }
   header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: .9rem; padding-bottom: .9rem; }
   .brand { font-family: Georgia, serif; font-weight: 600; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
-  nav a { color: var(--muted); text-decoration: none; margin-left: 1.1rem; font-size: .95rem; }
+  nav a { color: var(--muted); text-decoration: none; margin-left: 1.1rem; font-size: .95rem; white-space: nowrap; }
   nav a:hover { color: var(--ink); }
   @media (max-width: 560px) { nav a:not(.cta-link) { display: none; } }
 
-  .hero { padding: 4.5rem 0 3.5rem; }
+  .hero { padding-top: 4.5rem; padding-bottom: 3.5rem; }
   .hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); margin: 0 0 1rem; max-width: 18ch; }
   .hero p.lead { font-size: 1.2rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.8rem; }
   .btn { display: inline-block; background: var(--accent); color: var(--accent-ink); padding: .75rem 1.3rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
@@ -83,14 +83,15 @@
   .sform label.q, .sform legend { font-weight: 600; }
   .sform .req { color: var(--accent); }
   .sform .hint { font-size: .9rem; color: var(--muted); }
-  .sform input[type=text], .sform input[type=email], .sform input[type=url], .sform textarea {
+  .sform input[type=text], .sform input[type=email], .sform input[type=url], .sform input[type=tel], .sform textarea {
     width: 100%; font: inherit; color: var(--ink); background: var(--bg);
     border: 1px solid var(--line); border-radius: 6px; padding: .6rem .7rem; }
   .sform textarea { min-height: 5.5rem; resize: vertical; }
   .sform input:focus, .sform textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
   .sform fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: .35rem; }
   .sform .choices { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; align-items: center; }
-  .sform .choices label { display: inline-flex; gap: .4rem; align-items: center; font-weight: 400; }
+  .sform .choices label { display: inline-flex; gap: .5rem; align-items: center; font-weight: 400; min-height: 44px; }
+  .sform .choices input[type=radio] { width: 1.15rem; height: 1.15rem; accent-color: var(--accent); }
   .sform .other-text { max-width: 14rem; }
   .scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
   .scale label { display: grid; place-items: center; padding: .45rem 0; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-weight: 400; background: var(--bg); }
@@ -98,6 +99,16 @@
   .scale input:checked + span { color: var(--accent-ink); }
   .scale label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .scale label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 1px; }
+  @media (max-width: 560px) {
+    .hero { padding-top: 2.8rem; padding-bottom: 2.4rem; }
+    .brand { font-size: 1rem; }
+    header.top .wrap { gap: .6rem; }
+    nav a { margin-left: 0; }
+    .scale { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .scale label { padding: .7rem 0; }
+    .suggest-box { padding: 1.1rem; }
+    .sform button.btn { justify-self: stretch; text-align: center; }
+  }
   .scale-ends { display: flex; justify-content: space-between; font-size: .85rem; color: var(--muted); }
   .sform button { justify-self: start; border: 0; cursor: pointer; font: inherit; }
   .sform button[disabled] { opacity: .6; cursor: wait; }
