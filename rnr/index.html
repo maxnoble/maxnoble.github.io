@@ -102,7 +102,9 @@
   .sform button { justify-self: start; border: 0; cursor: pointer; font: inherit; }
   .sform button[disabled] { opacity: .6; cursor: wait; }
   .thanks h3 { margin: 0 0 .4rem; }
-  .form-error { color: #b3261e; }
+  .form-error, .err { color: #b3261e; font-size: .9rem; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .form-error, :root:not([data-theme="light"]) .err { color: #f2b8b5; } }
+  .sform .invalid { border-color: #b3261e !important; }
 
   footer { border-top: 1px solid var(--line); padding: 2rem 0 3rem; color: var(--muted); font-size: .92rem; }
 </style>
@@ -193,11 +195,12 @@
       <h2>Suggest a location</h2>
       <p class="intro">There are hundreds of buildings that could become a Men's Convent. Know of one that's empty or at risk, anywhere? Tell us about it.</p>
       <div class="suggest-box">
-        <form class="sform" id="suggest-form" action="https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/formResponse" method="POST" target="gform-sink">
+        <form class="sform" id="suggest-form" action="https://docs.google.com/forms/d/e/1FAIpQLSe5F4wM2ndvBinX8FhEXiHAIgT6D5XqJo1bn4hynB5Pa98YTg/formResponse" method="POST" target="gform-sink" novalidate>
           <div class="field">
             <label class="q" for="f-email">Your email <span class="req">*</span></label>
             <input id="f-email" type="email" name="emailAddress" required autocomplete="email">
             <span class="hint">A copy of your suggestion is sent here.</span>
+            <span class="err" id="e-email" hidden></span>
           </div>
 
           <fieldset>
@@ -206,18 +209,22 @@
               <label><input type="radio" name="entry.1686422312" value="Saskatchewan" required> Saskatchewan</label>
               <label><input type="radio" name="entry.1686422312" value="Alberta"> Alberta</label>
               <label><input type="radio" name="entry.1686422312" value="__other_option__" id="f-where-other"> Other:</label>
-              <input class="other-text" type="text" name="entry.1686422312.other_option_response" id="f-where-other-text" aria-label="Other location">
+              <input class="other-text" type="text" name="entry.1686422312.other_option_response" id="f-where-other-text" aria-label="Other location" maxlength="100">
             </div>
+            <span class="err" id="e-where" hidden></span>
           </fieldset>
 
           <div class="field">
             <label class="q" for="f-what">What is or was the building? Landmark significance? <span class="req">*</span></label>
-            <textarea id="f-what" name="entry.1505201343" required></textarea>
+            <textarea id="f-what" name="entry.1505201343" required maxlength="2000"></textarea>
+            <span class="err" id="e-what" hidden></span>
           </div>
 
           <div class="field">
             <label class="q" for="f-owner">Who owns it? <span class="req">*</span></label>
-            <input id="f-owner" type="text" name="entry.762597540" required>
+            <input id="f-owner" type="text" name="entry.762597540" required maxlength="200">
+            <span class="hint">If you don't know, write "Unknown".</span>
+            <span class="err" id="e-owner" hidden></span>
           </div>
 
           <fieldset>
@@ -235,16 +242,25 @@
               <label><input type="radio" name="entry.2011804583" value="10"><span>10</span></label>
             </div>
             <div class="scale-ends"><span>1 = Collapsed roof</span><span>10 = Immaculate</span></div>
+            <span class="err" id="e-cond" hidden></span>
           </fieldset>
 
           <div class="field">
             <label class="q" for="f-photos">Link to photos</label>
-            <input id="f-photos" type="text" name="entry.1899643314" placeholder="https://">
+            <input id="f-photos" type="text" name="entry.1899643314" placeholder="https://" inputmode="url" maxlength="500">
+            <span class="err" id="e-photos" hidden></span>
           </div>
 
           <div class="field">
-            <label class="q" for="f-name">First and last name and phone number <span class="req">*</span></label>
-            <input id="f-name" type="text" name="entry.1188429359" required autocomplete="name">
+            <label class="q" for="f-name">First and last name <span class="req">*</span></label>
+            <input id="f-name" type="text" name="entry.1188429359" required autocomplete="name" maxlength="100">
+            <span class="err" id="e-name" hidden></span>
+          </div>
+
+          <div class="field">
+            <label class="q" for="f-phone">Phone number <span class="req">*</span></label>
+            <input id="f-phone" type="tel" name="entry.1537655487" required autocomplete="tel" inputmode="tel" placeholder="306 555 1234" maxlength="25">
+            <span class="err" id="e-phone" hidden></span>
           </div>
 
           <input type="hidden" name="fvv" value="1">
@@ -304,7 +320,93 @@
     let sent = false, timer = null;
 
     otherText.addEventListener("input", () => { if (otherText.value) other.checked = true; });
-    form.addEventListener("change", () => { otherText.required = other.checked; });
+
+    // ---- Validation ----
+    const $ = (id) => document.getElementById(id);
+    const val = (id) => $(id).value.trim();
+    const checked = (name) => form.querySelector('input[name="' + name + '"]:checked');
+
+    function formatPhone(raw) {
+      const t = raw.trim();
+      const d = t.replace(/\D/g, "");
+      if (t.startsWith("+") && !t.startsWith("+1")) {
+        return d.length >= 8 && d.length <= 15 ? "+" + d : null;    // international
+      }
+      const n = d.length === 11 && d[0] === "1" ? d.slice(1) : d;    // drop leading 1
+      if (n.length !== 10 || !/^[2-9]\d{2}[2-9]/.test(n)) return null;
+      return "(" + n.slice(0, 3) + ") " + n.slice(3, 6) + "-" + n.slice(6);
+    }
+    function fixLink(raw) {
+      const t = raw.trim();
+      if (!t) return "";
+      const u = /^https?:\/\//i.test(t) ? t : "https://" + t;
+      return /^https?:\/\/[^\s\/]+\.[^\s\/]{2,}\S*$/i.test(u) ? u : null;
+    }
+
+    const rules = {
+      email: { input: "f-email", test: () => /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(val("f-email")),
+               msg: "Enter a valid email, like name@example.com." },
+      where: { input: "f-where-other-text", test: () => {
+                 const c = checked("entry.1686422312");
+                 return c && (c.value !== "__other_option__" || val("f-where-other-text").length >= 2);
+               }, msg: "Choose a province, or pick Other and type where the building is." },
+      what:  { input: "f-what", test: () => val("f-what").length >= 3,
+               msg: "Tell us what the building is or was." },
+      owner: { input: "f-owner", test: () => val("f-owner").length >= 2,
+               msg: 'Tell us who owns it, or write "Unknown".' },
+      cond:  { input: null, test: () => !!checked("entry.2011804583"),
+               msg: "Pick a number from 1 to 10." },
+      photos:{ input: "f-photos", test: () => fixLink($("f-photos").value) !== null,
+               msg: "Enter a full web link, like https://photos.example.com/building." },
+      name:  { input: "f-name", test: () => /^[\p{L}'’.\-]+(?:\s+[\p{L}'’.\-]+)+$/u.test(val("f-name")),
+               msg: "Enter your first and last name." },
+      phone: { input: "f-phone", test: () => formatPhone($("f-phone").value) !== null,
+               msg: "Enter a 10-digit phone number, like 306 555 1234. For outside North America, start with +." },
+    };
+
+    function check(key) {
+      const r = rules[key], ok = r.test(), e = $("e-" + key);
+      e.textContent = ok ? "" : r.msg;
+      e.hidden = ok;
+      if (r.input) { $(r.input).classList.toggle("invalid", !ok && (key !== "where" || (checked("entry.1686422312") || {}).value === "__other_option__")); $(r.input).setAttribute("aria-invalid", String(!ok)); }
+      return ok;
+    }
+
+    // Check a field when the visitor leaves it; clear the message as soon as it's fixed.
+    for (const key in rules) {
+      const r = rules[key];
+      if (r.input) {
+        $(r.input).addEventListener("blur", () => { if ($(r.input).value.trim() || key === "where") check(key); });
+        $(r.input).addEventListener("input", () => { if (!$("e-" + key).hidden) check(key); });
+      }
+    }
+    form.addEventListener("change", (ev) => {
+      if (ev.target.name === "entry.1686422312" && !$("e-where").hidden) check("where");
+      if (ev.target.name === "entry.2011804583" && !$("e-cond").hidden) check("cond");
+    });
+    $("f-phone").addEventListener("blur", () => { const p = formatPhone($("f-phone").value); if (p) $("f-phone").value = p; });
+    $("f-photos").addEventListener("blur", () => { const l = fixLink($("f-photos").value); if (l) $("f-photos").value = l; });
+
+    form.addEventListener("submit", (ev) => {
+      let first = null;
+      for (const key in rules) {
+        if (!check(key) && !first) first = key;
+      }
+      if (first) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        const r = rules[first];
+        const target = r.input && (first !== "where" || (checked("entry.1686422312") || {}).value === "__other_option__")
+          ? $(r.input) : $("e-" + first).closest("fieldset, .field").querySelector("input");
+        target.focus();
+        return;
+      }
+      // Tidy values before they're sent.
+      ["f-email", "f-what", "f-owner", "f-name"].forEach((id) => { $(id).value = $(id).value.trim(); });
+      $("f-phone").value = formatPhone($("f-phone").value);
+      $("f-photos").value = fixLink($("f-photos").value);
+      if ((checked("entry.1686422312") || {}).value !== "__other_option__") otherText.value = "";
+    }, true);
 
     form.addEventListener("submit", () => {
       sent = true;
