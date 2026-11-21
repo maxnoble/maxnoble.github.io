@@ -246,8 +246,16 @@
           </fieldset>
 
           <div class="field">
+            <label class="q" for="f-town">Town or nearest town <span class="req">*</span></label>
+            <input id="f-town" type="text" required autocomplete="address-level2" maxlength="100">
+            <span class="hint">Add the street address if you know it.</span>
+            <span class="err" id="e-town" hidden></span>
+          </div>
+
+          <div class="field">
             <label class="q" for="f-what">What is or was the building? Landmark significance? <span class="req">*</span></label>
-            <textarea id="f-what" name="entry.1505201343" required maxlength="2000"></textarea>
+            <textarea id="f-what" required maxlength="2000"></textarea>
+            <input type="hidden" name="entry.1505201343" id="f-what-sent">
             <span class="err" id="e-what" hidden></span>
           </div>
 
@@ -340,6 +348,10 @@
 <script>
   // The form posts straight to the Google Form "RnR -Waiting list" (project Gmail).
   // If you add, remove or change questions in Google Forms, this form must be updated too.
+  // The Google Form has no town question yet, so the town is sent at the top of the
+  // "What is or was the building?" answer. Once a town question exists, put its entry
+  // number here (e.g. "123456789") and the town goes to its own column instead.
+  const TOWN_ENTRY = null;
   (function () {
     const form = document.getElementById("suggest-form");
     const sink = document.getElementById("gform-sink");
@@ -381,6 +393,8 @@
                  const c = checked("entry.1686422312");
                  return c && (c.value !== "__other_option__" || val("f-where-other-text").length >= 2);
                }, msg: "Choose a province, or pick Other and type where the building is." },
+      town:  { input: "f-town", test: () => val("f-town").length >= 2,
+               msg: "Tell us the town, or the nearest town." },
       what:  { input: "f-what", test: () => val("f-what").length >= 3,
                msg: "Tell us what the building is or was." },
       owner: { input: "f-owner", test: () => val("f-owner").length >= 2,
@@ -433,7 +447,13 @@
         return;
       }
       // Tidy values before they're sent.
-      ["f-email", "f-what", "f-owner", "f-name"].forEach((id) => { $(id).value = $(id).value.trim(); });
+      ["f-email", "f-town", "f-what", "f-owner", "f-name"].forEach((id) => { $(id).value = $(id).value.trim(); });
+      if (TOWN_ENTRY) {
+        $("f-town").name = "entry." + TOWN_ENTRY;
+        $("f-what-sent").value = val("f-what");
+      } else {
+        $("f-what-sent").value = "Town: " + val("f-town") + "\n\n" + val("f-what");
+      }
       $("f-phone").value = formatPhone($("f-phone").value);
       $("f-photos").value = fixLink($("f-photos").value);
       if ((checked("entry.1686422312") || {}).value !== "__other_option__") otherText.value = "";
