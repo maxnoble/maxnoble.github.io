@@ -120,6 +120,11 @@
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .form-error, :root:not([data-theme="light"]) .err { color: #f2b8b5; } }
   .sform .invalid { border-color: #b3261e !important; }
 
+  .card .big { display: block; font-family: Georgia, "Iowan Old Style", serif; font-size: 2.1rem; font-weight: 600; line-height: 1.1; color: var(--accent); margin-bottom: .3rem; }
+  .sources { font-size: .85rem; color: var(--muted); max-width: 44rem; margin: 1.6rem auto 0; }
+  .sources a { color: var(--muted); }
+  p.close { max-width: 40rem; margin: 1.8rem auto 0; font-size: 1.1rem; }
+
   footer { border-top: 1px solid var(--line); padding: 2rem 0 3rem; color: var(--muted); font-size: .92rem; }
 
   /* ---- Centred layout ---- */
@@ -146,8 +151,10 @@
   <div class="wrap">
     <a class="brand" href="#">RnR: Rescue and Restoration</a>
     <nav>
+      <a href="#why">Why it matters</a>
       <a href="#idea">The idea</a>
       <a href="#phases">Phases</a>
+      <a href="#kitchen">Kitchen Boss</a>
       <a href="#involved">Get involved</a>
       <a class="cta-link" href="#suggest">Suggest a location</a>
     </nav>
@@ -157,9 +164,45 @@
 <main>
   <div class="wrap hero">
     <h1>A Men's Convent in a building that needs saving.</h1>
-    <p class="lead">Across Saskatchewan and beyond, historic buildings stand empty. RnR is a way to bring them back: a community of men restores the building, learns a trade doing it, and opens it back up to the town.</p>
+    <p class="lead">Across Saskatchewan and beyond, historic buildings stand empty. RnR is a way to bring them back: a community of men restores the building and learns a trade doing it.</p>
     <a class="btn" href="#suggest">Suggest a location</a>
   </div>
+
+  <section id="why">
+    <div class="wrap">
+      <h2>Why it matters</h2>
+      <p class="intro">Restoring a building is the work. Behind it are five problems that hit men hardest, and RnR takes them on together.</p>
+      <div class="grid">
+        <div class="card">
+          <span class="big">9,000</span>
+          <h3>The trades are retiring</h3>
+          <p>Saskatchewan's construction industry expects about 9,000 workers to retire by 2034, nearly a quarter of its workforce. Without new tradesmen, keeping our buildings and infrastructure running only gets more expensive.</p>
+        </div>
+        <div class="card">
+          <span class="big">17.6</span>
+          <h3>Men are dying by suicide</h3>
+          <p>Saskatchewan's suicide rate is 17.6 per 100,000 people, against 10.9 across Canada. Nationally, men account for nearly 75% of suicide deaths.</p>
+        </div>
+        <div class="card">
+          <span class="big">1,499</span>
+          <h3>Homelessness is rising</h3>
+          <p>Saskatoon's 2024 count found at least 1,499 people experiencing homelessness, nearly triple the 2022 count. Half of them were men.</p>
+        </div>
+        <div class="card">
+          <span class="big">49%</span>
+          <h3>Young men are checking out</h3>
+          <p>Nearly half of Canadian men in their twenties live with their parents, more than women. After 30 years of "get a degree," only about 1 in 4 young men has one, against 2 in 5 young women. A trade, a crew and a purpose give them a way back in.</p>
+        </div>
+        <div class="card">
+          <span class="big">1 in 3</span>
+          <h3>Addiction is hitting the trades</h3>
+          <p>About 1 in 3 Canadian construction workers in safety-sensitive jobs say they've used alcohol or drugs just before or during work, or worked hungover or high. Of Canadians who died of an overdose while employed, 30 to 50% worked in the trades.</p>
+        </div>
+      </div>
+      <p class="close">A Men's Convent meets all five at once. Men learn a trade by saving a building no one else will, in a substance-free community that feeds them, works beside them and gives them a purpose.</p>
+      <p class="sources">Sources: <a href="https://buildforce.ca/en/press-release/construction-growth-in-saskatchewan-is-driven-by-residential-activity-as-the-non-residential-sector-steps-down-from-recent-highs">BuildForce Canada, 2025–2034 Saskatchewan outlook</a> · <a href="https://cmha.ca/wp-content/uploads/2024/11/State-of-Mental-Health-profile-Saskatchewan.pdf">CMHA, State of Mental Health in Canada 2024: Saskatchewan</a> · <a href="https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html">Public Health Agency of Canada, suicide mortality</a> · <a href="https://cuisr.usask.ca/documents/publications/2020-2024/pit-count-community-report-2024.pdf">2024 Saskatoon Point-in-Time Homelessness Count</a> · <a href="https://vanierinstitute.ca/wp-content/uploads/2024/04/Families-count-2024-young-adults-are-more-likely-to-live-with-parents.pdf">Vanier Institute, Families Count 2024</a> · <a href="https://www150.statcan.gc.ca/n1/daily-quotidien/221130/dq221130a-eng.htm">Statistics Canada, 2021 Census: education</a> · <a href="https://ccsa.ca/sites/default/files/2025-07/Research-Brief-Construction-en.pdf">CCSA, Workplaces and Substance Use: Construction Industry (2025)</a> · <a href="https://www.canada.ca/en/services/health/campaigns/men-construction-trades-overdose-crisis-canada/men-trades-substance-use.html">Government of Canada, Men in trades and substance use</a></p>
+    </div>
+  </section>
 
   <section id="idea">
     <div class="wrap">
@@ -208,7 +251,7 @@
         <div class="phase">
           <span class="tag">Phase 2</span>
           <h3>Restoration</h3>
-          <p>Teams restore the building room by room. A recovery program begins with a licensed clinical partner.</p>
+          <p>Teams restore the building room by room. A recovery program begins.</p>
           <div class="pub">Public use: about 5%<div class="meter"><span style="width:5%"></span></div></div>
         </div>
         <div class="phase">
@@ -218,6 +261,41 @@
           <div class="pub">Public use: over half<div class="meter"><span style="width:55%"></span></div></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="kitchen">
+    <div class="wrap">
+      <h2>Kitchen Boss wanted</h2>
+      <p class="intro">Food is the first service. Before the beds are built and before the first wall is repaired, every man on site gets fed. We're looking for the man who will run that kitchen.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Feed the crew</h3>
+          <p>Feed up to 50 men three meals a day, mostly from donated food. There's one dish on the menu each day: the Surprise of the Day.</p>
+        </div>
+        <div class="card">
+          <h3>Teach as you cook</h3>
+          <p>Every man in the kitchen is learning. You train them in cooking, food safety and running a kitchen, and you sign off the skills they earn.</p>
+        </div>
+        <div class="card">
+          <h3>Lead the first trade area</h3>
+          <p>The kitchen opens first. As Kitchen Boss you choose the projects and the crews, and you oversee the journeymen who come to help.</p>
+        </div>
+        <div class="card">
+          <h3>A go-getter in the kitchen</h3>
+          <p>You love running a kitchen, and you've fed a crowd on a tight budget at a camp, a work camp, a mission or a busy restaurant.</p>
+        </div>
+        <div class="card">
+          <h3>Of one mind</h3>
+          <p>You follow Christ and share the convent's faith and purpose. You serve men of any faith or none with the same care.</p>
+        </div>
+        <div class="card">
+          <h3>Volunteer first, needs met</h3>
+          <p>We keep salaries as low as possible. If you can afford to volunteer, that's the goal. If you need money, we'll find it for what you need beyond your basics. The more effort you put in, the more resources you get.</p>
+        </div>
+      </div>
+      <!-- TODO: how to apply (contact route not chosen yet; project email stays off the site) -->
+      <p class="note">How to apply: coming soon.</p>
     </div>
   </section>
 
@@ -262,7 +340,6 @@
           <div class="field">
             <label class="q" for="f-owner">Who owns it? <span class="req">*</span></label>
             <input id="f-owner" type="text" name="entry.762597540" required maxlength="200">
-            <span class="hint">If you don't know, write "Unknown".</span>
             <span class="err" id="e-owner" hidden></span>
           </div>
 
@@ -310,7 +387,7 @@
 
         <div class="thanks" id="f-thanks" hidden>
           <h3>Thank you.</h3>
-          <p>Your suggestion has been received. A copy is on its way to your email.</p>
+          <p>Your suggestion has been sent.</p>
           <p><a href="#suggest" id="f-again">Suggest another building</a></p>
         </div>
         <iframe name="gform-sink" id="gform-sink" title="" hidden></iframe>
@@ -328,7 +405,7 @@
         </div>
         <div class="card">
           <h3>Trade experts</h3>
-          <p>Kitchen, HVAC, boiler, gas fitting, electrical, plumbing, masonry, IT and more. Each trade area needs someone in charge.</p>
+          <p>Kitchen, HVAC, boiler, gas fitting, electrical, plumbing, masonry, IT and more. Each trade area has many projects to choose from. The kitchen comes first: <a href="#kitchen">Kitchen Boss wanted</a>.</p>
         </div>
         <div class="card">
           <h3>Communities</h3>
@@ -397,8 +474,12 @@
                msg: "Tell us the town, or the nearest town." },
       what:  { input: "f-what", test: () => val("f-what").length >= 3,
                msg: "Tell us what the building is or was." },
-      owner: { input: "f-owner", test: () => val("f-owner").length >= 2,
-               msg: 'Tell us who owns it, or write "Unknown".' },
+      owner: { input: "f-owner", test: () => {
+                 const v = val("f-owner");
+                 const n = v.toLowerCase().replace(/[^a-z ]/g, "").replace(/\s+/g, " ").trim();
+                 const vague = /^(unknown|not known|unsure|not sure|dont know|do not know|i dont know|i do not know|no idea|no clue|idk|na|none|nobody|no one|tbd|unk|dunno|not certain|uncertain|maybe|unsure who|dont know who)$/;
+                 return v.length >= 2 && n.length >= 2 && !vague.test(n);
+               }, msg: "Tell us who owns the building. If you don't know yet, please find out before you send this." },
       cond:  { input: null, test: () => !!checked("entry.2011804583"),
                msg: "Pick a number from 1 to 10." },
       photos:{ input: "f-photos", test: () => fixLink($("f-photos").value) !== null,
