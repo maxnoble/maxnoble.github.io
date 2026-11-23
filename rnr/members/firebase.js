@@ -26,7 +26,7 @@ export const HELP_OPTIONS = [
 ];
 
 // Pages a "next" parameter may send people back to (no open redirects).
-const NEXT_PAGES = new Set(["kitchen-boss.html"]);
+const NEXT_PAGES = new Set(["kitchen-boss.html", "phases.html", "get-involved.html"]);
 export function safeNext(value) {
   return NEXT_PAGES.has(value) ? value : null;
 }

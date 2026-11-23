@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Years, Three Phases</title>
+<meta name="description" content="RnR members: the three phases of a restoration.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../site.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../">RnR: Rescue and Restoration</a>
+    <nav>
+      <a href="../">Home</a>
+      <a class="cta-link" href="./">Members</a>
+    </nav>
+  </div>
+</header>
+
+<p class="gate-wait" id="wait">Loading…</p>
+
+<main id="gated" hidden>
+  <section id="phases" style="border-top:0">
+    <div class="wrap">
+      <h2>About five years, three phases</h2>
+      <p class="intro">Each building opens a little more to the public as the work goes on.</p>
+      <div class="phases">
+        <div class="phase">
+          <span class="tag">Phase 1</span>
+          <h3>Rescue</h3>
+          <p>A men's convent moves in. Secure the site, deal with emergencies like water, clean out and stabilize.</p>
+          <div class="pub">Public use: about 1%<div class="meter"><span style="width:1%"></span></div></div>
+        </div>
+        <div class="phase">
+          <span class="tag">Phase 2</span>
+          <h3>Restoration</h3>
+          <p>Teams restore the building room by room. A recovery program begins.</p>
+          <div class="pub">Public use: about 5%<div class="meter"><span style="width:5%"></span></div></div>
+        </div>
+        <div class="phase">
+          <span class="tag">Phase 3</span>
+          <h3>Freedom Learning Hub</h3>
+          <p>The restored building opens most of its space to the community: a place where people of all ages learn, research and build.</p>
+          <div class="pub">Public use: over half<div class="meter"><span style="width:55%"></span></div></div>
+        </div>
+      </div>
+      <p class="note"><a href="./">Back to the members page</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>RnR: Rescue and Restoration · A non-profit Men's Convent model</p>
+  </div>
+</footer>
+
+<script type="module">
+import { requireMember } from "./firebase.js";
+const member = await requireMember("phases.html");
+if (member) {
+  document.getElementById("wait").hidden = true;
+  document.getElementById("gated").hidden = false;
+}
+</script>
+</body>
+</html>

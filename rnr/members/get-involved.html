@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Involved</title>
+<meta name="description" content="RnR members: ways to get involved.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../site.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../">RnR: Rescue and Restoration</a>
+    <nav>
+      <a href="../">Home</a>
+      <a class="cta-link" href="./">Members</a>
+    </nav>
+  </div>
+</header>
+
+<p class="gate-wait" id="wait">Loading…</p>
+
+<main id="gated" hidden>
+  <section id="involved" style="border-top:0">
+    <div class="wrap">
+      <h2>Get involved</h2>
+      <p class="intro">Everyone contributes. Here's where you fit in.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Journeymen</h3>
+          <p>Give a week of your trade. Stay on site, lead a small team and pass on what you know.</p>
+        </div>
+        <div class="card">
+          <h3>Trade experts</h3>
+          <p>Kitchen, HVAC, boiler, gas fitting, electrical, plumbing, masonry, IT and more. Each trade area has many projects to choose from. The kitchen comes first: <a href="kitchen-boss.html">Kitchen Boss wanted</a>.</p>
+        </div>
+        <div class="card">
+          <h3>Communities</h3>
+          <p>Have an empty building in your town? <a href="../#suggest">Suggest it.</a></p>
+        </div>
+      </div>
+      <p class="note"><a href="./">Back to the members page</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>RnR: Rescue and Restoration · A non-profit Men's Convent model</p>
+  </div>
+</footer>
+
+<script type="module">
+import { requireMember } from "./firebase.js";
+const member = await requireMember("get-involved.html");
+if (member) {
+  document.getElementById("wait").hidden = true;
+  document.getElementById("gated").hidden = false;
+}
+</script>
+</body>
+</html>
