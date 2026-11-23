@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RnR Members</title>
+<meta name="description" content="Join RnR: Rescue and Restoration, or sign in to the members area.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../site.css">
+</head>
+<body class="members">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../">RnR: Rescue and Restoration</a>
+    <nav>
+      <a href="../#why">Why it matters</a>
+      <a href="../#idea">The idea</a>
+      <a class="cta-link" href="../">Home</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <p class="gate-wait" id="s-wait">Loading…</p>
+
+    <!-- Firebase not set up yet -->
+    <div class="panel" id="s-setup" hidden>
+      <h1>Members</h1>
+      <p>Sign-in is being set up. Please check back soon.</p>
+      <p><a href="../">Back to the home page</a></p>
+    </div>
+
+    <!-- Signed out -->
+    <div class="panel" id="s-signin" hidden>
+      <h1>Join or sign in</h1>
+      <p>Members can read the full roles, starting with Kitchen Boss. Joining is free, and the same button works whether you're new or coming back.</p>
+      <div class="stack">
+        <button class="btn" id="b-google" type="button">Continue with Google</button>
+        <span class="or">or</span>
+      </div>
+      <form class="sform" id="f-email" novalidate>
+        <div class="field">
+          <label class="q" for="i-email">Your email</label>
+          <input id="i-email" type="email" autocomplete="email" required maxlength="200">
+          <span class="hint">We'll email you a one-time sign-in link. No password needed.</span>
+        </div>
+        <button class="btn-plain" type="submit" id="b-email">Email me a sign-in link</button>
+      </form>
+      <p class="form-error" id="e-signin" hidden></p>
+      <div class="privacy">
+        <strong>What we keep</strong>
+        <ul>
+          <li>Your name, email, and how you'd like to help.</li>
+          <li>We use it only to contact you about RnR. It's never sold or shared.</li>
+          <li>You can delete your account at any time from the members page.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Email link sent -->
+    <div class="panel" id="s-sent" hidden>
+      <h1>Check your email</h1>
+      <p>We sent a sign-in link to <strong id="t-sent-to"></strong>. Open it on this device to finish signing in. It can take a minute, so check your spam folder too.</p>
+      <p><button class="btn-plain" type="button" id="b-back">Use a different email</button></p>
+    </div>
+
+    <!-- Link opened on a different device or browser -->
+    <div class="panel" id="s-confirm" hidden>
+      <h1>Confirm your email</h1>
+      <p>You opened the sign-in link on a different device or browser. Type the email it was sent to.</p>
+      <form class="sform" id="f-confirm" novalidate>
+        <div class="field">
+          <label class="q" for="i-confirm">Your email</label>
+          <input id="i-confirm" type="email" autocomplete="email" required maxlength="200">
+        </div>
+        <button class="btn" type="submit">Finish signing in</button>
+      </form>
+      <p class="form-error" id="e-confirm" hidden></p>
+    </div>
+
+    <!-- Profile (first sign-in, or editing) -->
+    <div class="panel" id="s-profile" hidden>
+      <h1 id="t-profile-title">Tell us about you</h1>
+      <p id="t-profile-intro">One last step. This is how we'll know you.</p>
+      <form class="sform" id="f-profile" novalidate>
+        <div class="field">
+          <label class="q" for="i-first">First name <span class="req">*</span></label>
+          <input id="i-first" type="text" autocomplete="given-name" required maxlength="60">
+        </div>
+        <div class="field">
+          <label class="q" for="i-last">Last name <span class="req">*</span></label>
+          <input id="i-last" type="text" autocomplete="family-name" required maxlength="60">
+        </div>
+        <fieldset>
+          <legend>How would you like to help?</legend>
+          <div class="choices col" id="c-helps"></div>
+          <span class="hint">Pick any that fit, or none for now.</span>
+        </fieldset>
+        <p class="form-error" id="e-profile" hidden></p>
+        <button class="btn" type="submit" id="b-save">Save</button>
+        <button class="btn-plain" type="button" id="b-cancel" hidden>Cancel</button>
+      </form>
+    </div>
+
+    <!-- Members home -->
+    <div class="panel" id="s-home" hidden>
+      <h1 id="t-welcome">Welcome</h1>
+      <p>Thanks for joining RnR. Here's what's in the members area so far.</p>
+      <ul class="links">
+        <li><a href="kitchen-boss.html">Kitchen Boss wanted<span>The first trade area: the full role.</span></a></li>
+      </ul>
+      <p class="note">More is coming as the work goes on.</p>
+      <div class="small-actions">
+        <button type="button" id="b-edit">Edit my details</button>
+        <button type="button" id="b-signout">Sign out</button>
+        <button type="button" id="b-delete" class="danger">Delete my account</button>
+      </div>
+      <p class="form-error" id="e-home" hidden></p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>RnR: Rescue and Restoration · A non-profit Men's Convent model</p>
+  </div>
+</footer>
+
+<script type="module">
+import {
+  ready, auth, HELP_OPTIONS, safeNext, getProfile, profileComplete, saveProfile,
+  signInGoogle, sendEmailLink, arrivedByEmailLink, rememberedEmail, finishEmailLink,
+  signOut, deleteMe, friendlyError,
+} from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const $ = (id) => document.getElementById(id);
+const STATES = ["s-wait", "s-setup", "s-signin", "s-sent", "s-confirm", "s-profile", "s-home"];
+function show(id) { STATES.forEach((s) => { $(s).hidden = s !== id; }); window.scrollTo(0, 0); }
+function err(id, e) { const el = $(id); el.textContent = typeof e === "string" ? e : friendlyError(e); el.hidden = false; }
+function clearErr(id) { $(id).hidden = true; }
+function busy(btn, on) { btn.disabled = on; }
+
+const next = safeNext(new URLSearchParams(location.search).get("next"));
+let profile = null;
+let isNew = false;
+
+// Help checkboxes
+$("c-helps").innerHTML = "";
+HELP_OPTIONS.forEach(([value, label]) => {
+  const l = document.createElement("label");
+  const i = document.createElement("input");
+  i.type = "checkbox"; i.value = value; i.name = "helps";
+  l.append(i, document.createTextNode(label));
+  $("c-helps").append(l);
+});
+
+function fillProfile(p) {
+  $("i-first").value = (p && p.firstName) || "";
+  $("i-last").value = (p && p.lastName) || "";
+  const helps = new Set((p && p.helps) || []);
+  document.querySelectorAll('#c-helps input').forEach((i) => { i.checked = helps.has(i.value); });
+}
+
+function showProfile(editing) {
+  isNew = !editing;
+  $("t-profile-title").textContent = editing ? "Edit my details" : "Tell us about you";
+  $("t-profile-intro").textContent = editing ? "Change anything, then save." : "One last step. This is how we'll know you.";
+  $("b-cancel").hidden = !editing;
+  fillProfile(profile);
+  clearErr("e-profile");
+  show("s-profile");
+}
+
+function showHome() {
+  $("t-welcome").textContent = "Welcome, " + profile.firstName;
+  clearErr("e-home");
+  show("s-home");
+}
+
+async function route(user) {
+  if (!user) { show("s-signin"); return; }
+  try {
+    profile = await getProfile(user);
+  } catch (e) { show("s-signin"); err("e-signin", e); return; }
+  if (!profileComplete(profile)) { showProfile(false); return; }
+  if (next) { location.replace(next); return; }
+  showHome();
+}
+
+if (!ready) {
+  show("s-setup");
+} else {
+  // Arriving from an emailed sign-in link
+  if (arrivedByEmailLink()) {
+    const email = rememberedEmail();
+    if (email) {
+      try { await finishEmailLink(email); } catch (e) { show("s-signin"); err("e-signin", e); }
+    } else {
+      show("s-confirm");
+    }
+  }
+  onAuthStateChanged(auth, (user) => {
+    if (!$("s-confirm").hidden && !user) return; // waiting for the email to be typed
+    route(user);
+  });
+}
+
+$("b-google").addEventListener("click", async () => {
+  clearErr("e-signin"); busy($("b-google"), true);
+  try { await signInGoogle(); } catch (e) { err("e-signin", e); }
+  busy($("b-google"), false);
+});
+
+$("f-email").addEventListener("submit", async (ev) => {
+  ev.preventDefault(); clearErr("e-signin");
+  const email = $("i-email").value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err("e-signin", "Please enter a valid email address."); return; }
+  busy($("b-email"), true);
+  try {
+    await sendEmailLink(email);
+    $("t-sent-to").textContent = email;
+    show("s-sent");
+  } catch (e) { err("e-signin", e); }
+  busy($("b-email"), false);
+});
+
+$("b-back").addEventListener("click", () => show("s-signin"));
+
+$("f-confirm").addEventListener("submit", async (ev) => {
+  ev.preventDefault(); clearErr("e-confirm");
+  const email = $("i-confirm").value.trim();
+  try {
+    await finishEmailLink(email);
+    route(auth.currentUser);
+  } catch (e) { err("e-confirm", e); }
+});
+
+$("f-profile").addEventListener("submit", async (ev) => {
+  ev.preventDefault(); clearErr("e-profile");
+  const firstName = $("i-first").value.trim();
+  const lastName = $("i-last").value.trim();
+  if (firstName.length < 1 || lastName.length < 1) { err("e-profile", "Please give your first and last name."); return; }
+  const helps = [...document.querySelectorAll('#c-helps input:checked')].map((i) => i.value);
+  busy($("b-save"), true);
+  try {
+    await saveProfile(auth.currentUser, { firstName, lastName, helps }, isNew);
+    profile = { ...(profile || {}), firstName, lastName, helps };
+    if (isNew && next) { location.replace(next); return; }
+    showHome();
+  } catch (e) { err("e-profile", e); }
+  busy($("b-save"), false);
+});
+
+$("b-cancel").addEventListener("click", showHome);
+$("b-edit").addEventListener("click", () => showProfile(true));
+$("b-signout").addEventListener("click", () => signOut());
+
+$("b-delete").addEventListener("click", async () => {
+  if (!confirm("Delete your RnR account and everything we keep about you? This can't be undone.")) return;
+  try {
+    await deleteMe();
+    show("s-signin");
+  } catch (e) {
+    err("e-home", e);
+    if (e.code === "auth/requires-recent-login") await signOut();
+  }
+});
+</script>
+</body>
+</html>

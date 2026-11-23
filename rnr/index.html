@@ -5,145 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RnR: Rescue and Restoration</title>
 <meta name="description" content="A Men's Convent in a historic building that needs saving. Suggest a location anywhere.">
-<style>
-  :root {
-    color-scheme: light dark;
-    --bg: #f7f3ec;
-    --surface: #fffdf8;
-    --ink: #2a2520;
-    --muted: #6b6157;
-    --line: #e2d9cb;
-    --accent: #8a4b2a;
-    --accent-ink: #ffffff;
-    --soft: #efe6d8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #1b1815;
-      --surface: #24201c;
-      --ink: #eee7dc;
-      --muted: #b0a596;
-      --line: #3a332c;
-      --accent: #d98b5f;
-      --accent-ink: #1b1815;
-      --soft: #2c2722;
-    }
-  }
-  :root[data-theme="light"] { color-scheme: light; }
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --bg: #1b1815; --surface: #24201c; --ink: #eee7dc; --muted: #b0a596;
-    --line: #3a332c; --accent: #d98b5f; --accent-ink: #1b1815; --soft: #2c2722;
-  }
-
-  * { box-sizing: border-box; }
-  [hidden] { display: none !important; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  h1, h2, h3 { font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; line-height: 1.2; font-weight: 600; }
-  a { color: var(--accent); }
-  .wrap { max-width: 60rem; margin: 0 auto; padding: 0 16px; }
-
-  header.top { border-bottom: 1px solid var(--line); }
-  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: .9rem; padding-bottom: .9rem; }
-  .brand { font-family: Georgia, serif; font-weight: 600; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
-  nav a { color: var(--muted); text-decoration: none; margin-left: 1.1rem; font-size: .95rem; white-space: nowrap; }
-  nav a:hover { color: var(--ink); }
-  @media (max-width: 560px) { nav a:not(.cta-link) { display: none; } }
-
-  .hero { padding-top: 4.5rem; padding-bottom: 3.5rem; }
-  .hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); margin: 0 0 1rem; max-width: 18ch; }
-  .hero p.lead { font-size: 1.2rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.8rem; }
-  .btn { display: inline-block; background: var(--accent); color: var(--accent-ink); padding: .75rem 1.3rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
-  .btn:hover { filter: brightness(1.08); }
-  .note { font-size: .9rem; color: var(--muted); margin-top: 1.2rem; }
-
-  section { padding: 3.2rem 0; border-top: 1px solid var(--line); }
-  section h2 { font-size: 1.8rem; margin: 0 0 .6rem; }
-  section > .wrap > p.intro { color: var(--muted); max-width: 40rem; margin: 0 0 2rem; }
-
-  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.2rem 1.3rem; }
-  .card h3 { margin: 0 0 .4rem; font-size: 1.15rem; }
-  .card p { margin: 0; }
-
-  .phases { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); counter-reset: ph; }
-  .phase { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.2rem 1.3rem; }
-  .phase .tag { display: inline-block; font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
-  .phase h3 { margin: .2rem 0 .5rem; font-size: 1.2rem; }
-  .phase .pub { margin-top: .8rem; font-size: .9rem; color: var(--muted); }
-  .meter { height: 6px; background: var(--soft); border-radius: 3px; margin-top: .35rem; overflow: hidden; }
-  .meter span { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
-
-  .suggest { background: var(--soft); }
-  .suggest-box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.4rem; }
-  .suggest-box ul { margin: .4rem 0 1.2rem; padding-left: 1.2rem; }
-  .sform { display: grid; gap: 1.2rem; }
-  .sform .field { display: grid; gap: .35rem; }
-  .sform label.q, .sform legend { font-weight: 600; }
-  .sform .req { color: var(--accent); }
-  .sform .hint { font-size: .9rem; color: var(--muted); }
-  .sform input[type=text], .sform input[type=email], .sform input[type=url], .sform input[type=tel], .sform textarea {
-    width: 100%; font: inherit; color: var(--ink); background: var(--bg);
-    border: 1px solid var(--line); border-radius: 6px; padding: .6rem .7rem; }
-  .sform textarea { min-height: 5.5rem; resize: vertical; }
-  .sform input:focus, .sform textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .sform fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: .35rem; }
-  .sform .choices { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; align-items: center; }
-  .sform .choices label { display: inline-flex; gap: .5rem; align-items: center; font-weight: 400; min-height: 44px; }
-  .sform .choices input[type=radio] { width: 1.15rem; height: 1.15rem; accent-color: var(--accent); }
-  .sform .other-text { max-width: 14rem; }
-  .scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
-  .scale label { display: grid; place-items: center; padding: .45rem 0; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-weight: 400; background: var(--bg); }
-  .scale input { position: absolute; opacity: 0; pointer-events: none; }
-  .scale input:checked + span { color: var(--accent-ink); }
-  .scale label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  .scale label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 1px; }
-  @media (max-width: 560px) {
-    .hero { padding-top: 2.8rem; padding-bottom: 2.4rem; }
-    .brand { font-size: 1rem; }
-    header.top .wrap { gap: .6rem; }
-    nav a { margin-left: 0; }
-    .scale { grid-template-columns: repeat(5, 1fr); gap: 6px; }
-    .scale label { padding: .7rem 0; }
-    .suggest-box { padding: 1.1rem; }
-    .sform button.btn { justify-self: stretch; text-align: center; }
-  }
-  .scale-ends { display: flex; justify-content: space-between; font-size: .85rem; color: var(--muted); }
-  .sform button { justify-self: start; border: 0; cursor: pointer; font: inherit; }
-  .sform button[disabled] { opacity: .6; cursor: wait; }
-  .thanks h3 { margin: 0 0 .4rem; }
-  .form-error, .err { color: #b3261e; font-size: .9rem; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .form-error, :root:not([data-theme="light"]) .err { color: #f2b8b5; } }
-  .sform .invalid { border-color: #b3261e !important; }
-
-  .card .big { display: block; font-family: Georgia, "Iowan Old Style", serif; font-size: 2.1rem; font-weight: 600; line-height: 1.1; color: var(--accent); margin-bottom: .3rem; }
-  .sources { font-size: .85rem; color: var(--muted); max-width: 44rem; margin: 1.6rem auto 0; }
-  .sources a { color: var(--muted); }
-  p.close { max-width: 40rem; margin: 1.8rem auto 0; font-size: 1.1rem; }
-
-  footer { border-top: 1px solid var(--line); padding: 2rem 0 3rem; color: var(--muted); font-size: .92rem; }
-
-  /* ---- Centred layout ---- */
-  body { text-align: center; }
-  header.top .wrap { flex-direction: column; justify-content: center; gap: .4rem; }
-  nav { display: flex; flex-wrap: wrap; justify-content: center; gap: .2rem 1.1rem; }
-  nav a { margin-left: 0; }
-  .hero h1, .hero p.lead, section > .wrap > p.intro { margin-left: auto; margin-right: auto; }
-  .sform .choices { justify-content: center; }
-  .sform fieldset legend { margin: 0 auto; }
-  .sform button, .sform button.btn { justify-self: center; }
-  .sform input[type=text], .sform input[type=email], .sform input[type=url], .sform input[type=tel], .sform textarea { text-align: left; }
-  .sform .other-text { flex-basis: 100%; max-width: 16rem; }
-  .phase .meter { margin-left: auto; margin-right: auto; max-width: 12rem; }
-  @media (max-width: 560px) {
-    nav a:not(.cta-link) { display: none; }
-    .sform button.btn { justify-self: stretch; }
-  }
-</style>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
 
@@ -154,7 +16,7 @@
       <a href="#why">Why it matters</a>
       <a href="#idea">The idea</a>
       <a href="#phases">Phases</a>
-      <a href="#kitchen">Kitchen Boss</a>
+      <a class="cta-link" href="members/">Sign in</a>
       <a href="#involved">Get involved</a>
       <a class="cta-link" href="#suggest">Suggest a location</a>
     </nav>
@@ -268,34 +130,8 @@
     <div class="wrap">
       <h2>Kitchen Boss wanted</h2>
       <p class="intro">Food is the first service. Before the beds are built and before the first wall is repaired, every man on site gets fed. We're looking for the man who will run that kitchen.</p>
-      <div class="grid">
-        <div class="card">
-          <h3>Feed the crew</h3>
-          <p>Feed up to 50 men three meals a day, mostly from donated food. There's one dish on the menu each day: the Surprise of the Day.</p>
-        </div>
-        <div class="card">
-          <h3>Teach as you cook</h3>
-          <p>Every man in the kitchen is learning. You train them in cooking, food safety and running a kitchen, and you sign off the skills they earn.</p>
-        </div>
-        <div class="card">
-          <h3>Lead the first trade area</h3>
-          <p>The kitchen opens first. As Kitchen Boss you choose the projects and the crews, and you oversee the journeymen who come to help.</p>
-        </div>
-        <div class="card">
-          <h3>A go-getter in the kitchen</h3>
-          <p>You love running a kitchen, and you've fed a crowd on a tight budget at a camp, a work camp, a mission or a busy restaurant.</p>
-        </div>
-        <div class="card">
-          <h3>Of one mind</h3>
-          <p>You follow Christ and share the convent's faith and purpose. You serve men of any faith or none with the same care.</p>
-        </div>
-        <div class="card">
-          <h3>Volunteer first, needs met</h3>
-          <p>We keep salaries as low as possible. If you can afford to volunteer, that's the goal. If you need money, we'll find it for what you need beyond your basics. The more effort you put in, the more resources you get.</p>
-        </div>
-      </div>
-      <!-- TODO: how to apply (contact route not chosen yet; project email stays off the site) -->
-      <p class="note">How to apply: coming soon.</p>
+      <a class="btn" href="members/kitchen-boss.html">Join or sign in to read the role</a>
+      <p class="note">Joining is free and takes a minute, with Google or your email.</p>
     </div>
   </section>
 
@@ -405,7 +241,7 @@
         </div>
         <div class="card">
           <h3>Trade experts</h3>
-          <p>Kitchen, HVAC, boiler, gas fitting, electrical, plumbing, masonry, IT and more. Each trade area has many projects to choose from. The kitchen comes first: <a href="#kitchen">Kitchen Boss wanted</a>.</p>
+          <p>Kitchen, HVAC, boiler, gas fitting, electrical, plumbing, masonry, IT and more. Each trade area has many projects to choose from. The kitchen comes first: <a href="members/kitchen-boss.html">Kitchen Boss wanted</a>.</p>
         </div>
         <div class="card">
           <h3>Communities</h3>
